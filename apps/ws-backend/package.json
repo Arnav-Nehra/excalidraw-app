@@ -1,5 +1,5 @@
 {
-  "name": "http-backend",
+  "name": "ws-backend",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -13,14 +13,10 @@
   "description": "",
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@types/express": "^5.0.1",
-    "@types/jsonwebtoken": "^9.0.9",
-    "backend-common": "workspace:*",
-    "@repo/common":"workspace:*",
-    "@repo/db":"workspace:*"
+    "@types/ws": "^8.18.1",
+    "backend-common":"workspace:*"
   },
   "dependencies": {
-    "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2"
+    "ws": "^8.18.1"
   }
 }
