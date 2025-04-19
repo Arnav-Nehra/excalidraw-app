@@ -44,19 +44,19 @@ app.post("/signin",async(req,res)=>{
     )
     return ;
     }
-    const User = await prismaClient.user.findFirst({
+    const user = await prismaClient.user.findFirst({
       where:{
         email : parsedData.data.username,
-        password : parsedData.data.username
+        password : parsedData.data.password
       }
     })
-    if(!User){
+    if(!user){
       res.status(403).json({
         message : "user not authorized"
       })
     }
     const token = jwt.sign({
-      UserId : User?.id
+      UserId : user?.id
     },JWT_SECRET)
 
     res.json(token);
@@ -70,23 +70,37 @@ app.post("/room",middleware,async(req,res)=>{
       return ;
     }
     //@ts-ignore
-    const userId = req.userId;
+
+    const userId = req.userId
+    console.log(userId)
     try{
     const room = await prismaClient.room.create({
       data:{
-        slug : parsedData.data?.name,
+        slug : parsedData.data.name,
         adminId : userId
       }
     })
-
     res.json({
       roomId : room.id 
     })
   }
   catch(e){
-    res.json(411).json({
-      message : "room already exists with the same name"
+    res.status(411).json({
+      message :  "room with same name is already present"
     })
   }
+})
+
+app.get("/chats/:roomId",async (req,res)=>{
+    const roomId = Number(req.params.roomId)
+    const messages = await prismaClient.chat.findMany({
+      where : {
+        roomId  : roomId
+      },
+      orderBy:{
+        id : "desc"
+      },
+      take : 50
+    })
 })
 app.listen(3002);
