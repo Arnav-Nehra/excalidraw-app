@@ -4,11 +4,10 @@ import { middleware } from "./middleware";
 import {JWT_SECRET} from '@repo/backend-common/config'
 import {CreateUserSchema,SigninSchema,CreateRoomSchema} from "@repo/common/types";
 import {prismaClient} from "@repo/db/client"
-
+import bcrypt, { genSalt } from "bcrypt"
 const app = express();
 app.use(express.json())
 app.post("/signup", async(req, res) => {
-
     const parsedData = CreateUserSchema.safeParse(req.body);
     if(!parsedData.success){
       res.json({
@@ -16,12 +15,19 @@ app.post("/signup", async(req, res) => {
       })
       return;
     }
+
+    async function hashPassword(password : string){
+      const salt = await bcrypt.genSalt(12)
+      const hashedPassword = await bcrypt.hash(password,salt)
+      return hashedPassword;
+    }
+   
     try{
     const user = await prismaClient.user.create({
       data: {
         email:parsedData.data.username,
         name:parsedData.data.name,
-        password:parsedData.data.password
+        password:await hashPassword(parsedData.data.password)
       }
     })
     res.json({
@@ -42,18 +48,28 @@ app.post("/signin",async(req,res)=>{
         message : "Incorrect Inputs" 
       }
     )
-    return ;
+    return;
     }
+
     const user = await prismaClient.user.findFirst({
       where:{
         email : parsedData.data.username,
-        password : parsedData.data.password
       }
     })
     if(!user){
       res.status(403).json({
         message : "user not authorized"
       })
+    }
+    else{
+      const comparedPassword = await bcrypt.compareSync(parsedData.data.password,user?.password)
+      console.log(comparedPassword)
+      if(comparedPassword != true){
+        res.status(403).json({
+          message : "user not authorized"
+        })
+        return;
+      }
     }
     const token = jwt.sign({
       UserId : user?.id
@@ -90,7 +106,17 @@ app.post("/room",middleware,async(req,res)=>{
     })
   }
 })
-
+app.get("/room/:slug",async(req,res)=>{
+  const slug = req.params.slug
+  const room = await prismaClient.room.findFirst({
+    where:{
+      slug
+    }
+  })
+  res.json({
+    room
+  })
+})
 app.get("/chats/:roomId",async (req,res)=>{
     const roomId = Number(req.params.roomId)
     const messages = await prismaClient.chat.findMany({
