@@ -1,0 +1,15 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="60" cy="60" r="55" fill="#f0f4ff" stroke="#3b82f6" stroke-width="5"/>
+
+  <!-- Spark (Creativity) - Slightly Up -->
+  <path d="M60 12 L63 20 L72 22 L65 28 L67 38 L60 33 L53 38 L55 28 L48 22 L57 20 Z" fill="#facc15"/>
+
+  <!-- Pen Icon - Exact Same Position -->
+  <path d="M78 38 L88 48 L55 82 L45 82 L45 72 Z" fill="#3b82f6"/>
+  <circle cx="88" cy="48" r="4" fill="#1d4ed8"/>
+
+  <!-- Collaboration Symbol - Nudged Down-Left -->
+  <rect x="18" y="50" width="22" height="22" rx="4" ry="4" fill="#60a5fa" transform="rotate(-15 29 61)"/>
+  <rect x="28" y="60" width="22" height="22" rx="4" ry="4" fill="#1e40af" transform="rotate(-15 39 71)"/>
+</svg>
