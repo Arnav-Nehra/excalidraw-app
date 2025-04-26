@@ -3,6 +3,8 @@ import { ArrowRight, Layers, Pencil, Share2 } from "lucide-react"
 import { Button } from "@repo/ui"
 
 import Link from "next/link"
+
+
 export default function Index() {
   return (
     <div className="flex min-h-screen flex-col bg-white">
@@ -13,12 +15,12 @@ export default function Index() {
             <span className="text-xl font-bold text-black">Sketchio</span>
           </div>
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm font-medium hover:text-rose-500 transition-colors text-black ml-40">
+            <Link href="#features" className="text-sm font-medium hover:text-rose-500 transition-colors text-black ml-40">
               Features
-            </a>
-            <a href="#testimonials" className="text-sm font-medium hover:text-rose-500 transition-colors text-black">
+            </Link>
+            <Link href="#testimonials" className="text-sm font-medium hover:text-rose-500 transition-colors text-black">
               Testimonials
-            </a>
+            </Link>
           </nav>
           <div className="flex items-center gap-4">
             <Link href="/signin">
@@ -49,7 +51,8 @@ export default function Index() {
             </p>
             <div className="mt-10">
               <Link href="/draw">
-                <Button size="lg" className="px-8 py-2 flex text-base bg-rose-500 hover:bg-rose-600 shadow-lg">
+                <Button size="lg" 
+                 className="px-8 py-2 flex text-base bg-rose-500 hover:bg-rose-600 shadow-lg">
                   Start drawing <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>

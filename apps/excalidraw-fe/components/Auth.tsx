@@ -50,7 +50,7 @@ async function postData({emailref , nameref , passwordref,setLoading,setError,ro
   await axios.post("http://localhost:3002/signup",{
     username : emailref.current?.value,
     password : passwordref.current?.value,
-    name :  nameref.current?.value
+    name :  nameref?.current?.value
 })
 .then((response) => {
   setLoading(false)
