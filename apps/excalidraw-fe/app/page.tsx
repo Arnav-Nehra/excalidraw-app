@@ -1,7 +1,8 @@
+"use client"
 import { ArrowRight, Layers, Pencil, Share2 } from "lucide-react"
 import { Button } from "@repo/ui"
-import Link from "next/link"
 
+import Link from "next/link"
 export default function Index() {
   return (
     <div className="flex min-h-screen flex-col bg-white">
@@ -21,12 +22,12 @@ export default function Index() {
           </nav>
           <div className="flex items-center gap-4">
             <Link href="/signin">
-              <Button variant="ghost" size="sm" className="hover:text-rose-500 text-black">
+              <Button variant="ghost" size="sm" className="hover:text-rose-500 cursor-pointer text-black">
                 Log in
               </Button>
             </Link>
             <Link href="/signup">
-              <Button size="sm" className="bg-rose-500 hover:bg-rose-600 text-white py-1 mr-4">
+              <Button size="sm" className="bg-rose-500 hover:bg-rose-600 cursor-pointer text-white py-1 mr-4">
                 Sign up
               </Button>
             </Link>

@@ -7,6 +7,8 @@ import {prismaClient} from "@repo/db/client"
 import bcrypt, { genSalt } from "bcrypt"
 const app = express();
 app.use(express.json())
+const cors=require('cors')
+app.use(cors({origin:true}))
 app.post("/signup", async(req, res) => {
     const parsedData = CreateUserSchema.safeParse(req.body);
     if(!parsedData.success){
