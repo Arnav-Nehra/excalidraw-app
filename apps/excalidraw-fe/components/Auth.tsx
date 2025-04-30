@@ -88,7 +88,6 @@ async function loginfunction({emailref , passwordref,setError,setLoading,router}
       password : passwordref.current?.value
     })
     .then((response)=>{
-      console.log(response)
       localStorage.setItem("token",response.data)
       setLoading(false)
       router.push("/")

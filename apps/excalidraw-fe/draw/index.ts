@@ -1,9 +1,15 @@
 import Konva from 'konva';
 import { Layer } from 'konva/lib/Layer';
 import { Stage } from 'konva/lib/Stage';
+import { HTTP_BACKEND } from '../config';
+import axios from 'axios';
+import { Shape } from 'konva/lib/Shape';
 
-export function initDraw(canvas: HTMLCanvasElement,stage :Stage,layer:Layer,shape:string) {
 
+export async function initDraw(canvas: HTMLCanvasElement,stage :Stage,layer:Layer,shape:string,socket:WebSocket,roomId:string) {
+    
+    let existingShapes : Shape[] = await getExistingShapes(roomId)
+    
     stage.off('mousedown');
     stage.off('mousemove');
     stage.off('mouseup');
@@ -13,9 +19,22 @@ export function initDraw(canvas: HTMLCanvasElement,stage :Stage,layer:Layer,shap
 
     let isDrawing = false;
 
+    socket.onmessage = (event)=>{
+        const message = JSON.parse(event.data);
+
+        if(message.type == "chat"){
+            const parsedShape = JSON.parse(message.message)
+            existingShapes.push(parsedShape.shape)
+            layer.clear()
+        }
+    }
+    layer.clear();
+
     stage.on('mousedown', (e) => {
+
         isDrawing = true;
         const pos = stage.getPointerPosition();
+
         if (pos && shape === "rectangle") {
             rect = new Konva.Rect({
                 x: pos.x,
@@ -62,8 +81,38 @@ export function initDraw(canvas: HTMLCanvasElement,stage :Stage,layer:Layer,shap
 
     stage.on('mouseup', () => {
         isDrawing = false;
+        let diagram: Shape | null = null;
+
+        if (shape === "rectangle" && rect) {
+            diagram = rect;
+        } else if (shape === "circle" && circ) {
+            diagram = circ;
+        } else {
+            return;
+        }
+
+        existingShapes.push(diagram)
+
+        socket.send(JSON.stringify({
+            type : "chat",
+            message : JSON.stringify({
+                diagram
+            })
+        }))
         rect = null;
         circ = null;
     });
+    
 }
 
+async function getExistingShapes(roomId: string) {
+    const res = await axios.get(`${HTTP_BACKEND}/chats/${roomId}`);
+    const messages = res.data.messages;
+
+    const shapes = messages.map((x: {message: string}) => {
+        const messageData = JSON.parse(x.message)
+        return messageData.shape;
+    })
+
+    return shapes;
+}
