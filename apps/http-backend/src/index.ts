@@ -5,6 +5,8 @@ import {JWT_SECRET} from '@repo/backend-common/config'
 import {CreateUserSchema,SigninSchema,CreateRoomSchema} from "@repo/common/types";
 import {prismaClient} from "@repo/db/client"
 import bcrypt, { genSalt } from "bcrypt"
+
+
 const app = express();
 app.use(express.json())
 const cors=require('cors')
@@ -81,7 +83,7 @@ app.post("/signin",async(req,res)=>{
 app.post("/room",middleware,async(req,res)=>{
     const parsedData = CreateRoomSchema.safeParse(req.body);
     if(!parsedData.success){
-      res.json({
+      res.status(411).json({
         message:"incorrect inputs"
       })
       return ;
@@ -101,7 +103,7 @@ app.post("/room",middleware,async(req,res)=>{
     })
   }
   catch(e){
-    res.status(411).json({
+    res.json({
       message :  "room with same name is already present"
     })
   }

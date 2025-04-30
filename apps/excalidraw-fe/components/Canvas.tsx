@@ -5,6 +5,8 @@ import { Game } from "../draw/game"
 import Konva from "konva";
 import { Stage } from "react-konva";
 import { StatsFs } from "fs";
+import { Button } from "@repo/ui";
+import Link from "next/link";
 
 export type Tool = "circle" | "rect";
 
@@ -59,7 +61,8 @@ function Topbar({selectedTool, setSelectedTool}: {
             left: 10
         }}>
             <div className="flex gap-t">
-                
+                <Link href={"/create-room"}><Button className="text-black">Create Room</Button></Link>
+                <Link href={"/join-room"}><Button className="text-black">Join Room</Button></Link>
                 <IconButton onClick={() => {
                     setSelectedTool("rect")
                 }} activated={selectedTool === "rect"} icon={<RectangleHorizontalIcon />} ></IconButton>

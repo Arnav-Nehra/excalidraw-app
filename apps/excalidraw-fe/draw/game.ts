@@ -63,7 +63,6 @@ export class Game {
 
   initHandlers() {
     this.socket.onmessage = (event) => {
-      console.log(event)
       const message = JSON.parse(event.data);
       if (message.type == "chat") {
         const parsedShape = JSON.parse(message.message);
@@ -142,7 +141,6 @@ export class Game {
 
     this.existingShapes.push(shape);
     this.clearCanvas();
-    console.log(shape)
     
     if (this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(

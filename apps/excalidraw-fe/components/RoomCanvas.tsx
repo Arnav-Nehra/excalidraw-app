@@ -8,18 +8,15 @@ import { Canvas } from "./Canvas";
 export default function RoomCanvas({roomId}:{roomId:string}) {
   const [socket, setSocket] = useState<WebSocket | null>(null);
 
-  // const [token, settoken] = useState("")
-
-  // useEffect(() => {
-  //   let value
-  //   // Get the value from local storage if it exists
-  //   value = localStorage.getItem("token") || ""
-  //   settoken(value)
-  // }, [])
 
   useEffect(()=>{
-    const ws = new WebSocket(`${WS_URL}?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOiJjZDc5ZmFmYy0wYzUwLTQ4OWYtOGIzMy05YmIyOTUxZmE0OTAiLCJpYXQiOjE3NDYwMDMwNDB9.kkwQe5sIi8oy-zkwcYb2PGGpUTSAylwJUZftRv8QP9M`)
-  
+    const token = localStorage.getItem("token");
+    if (!token) {
+        console.error("No token found in local storage.");
+        return;
+    }
+    const ws = new WebSocket(`${WS_URL}?token=${token}`)
+
     ws.onopen = ()=>{
       setSocket(ws)
       const data = JSON.stringify({

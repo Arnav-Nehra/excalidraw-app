@@ -14,12 +14,11 @@ const users: User[] = [];
 function checkUser(token: string): string | null {
   try {
 
-    const decoded = jwt.verify(token,"123123");
-
+    const decoded = jwt.decode(token);
     if (typeof decoded == "string") {
       return null;
     }
-    if (!decoded.UserId) {
+    if (!decoded) {
       return null;
     }
     return decoded.UserId
@@ -38,7 +37,6 @@ wss.on('connection', function connection(ws, request) {
   const userId = checkUser(token)
   if (userId == null) {
     ws.close()
-    console.log("closing")
     return null;
   }
   users.push({
