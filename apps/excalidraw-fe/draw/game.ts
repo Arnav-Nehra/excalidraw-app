@@ -57,7 +57,7 @@ export class Game {
 
   async init() {
     this.existingShapes = await getExistingShapes(this.roomId);
-    
+
     this.clearCanvas();
   }
 
@@ -141,7 +141,7 @@ export class Game {
 
     this.existingShapes.push(shape);
     this.clearCanvas();
-    
+
     if (this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(
         JSON.stringify({

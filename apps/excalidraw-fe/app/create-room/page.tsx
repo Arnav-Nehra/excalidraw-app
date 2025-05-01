@@ -29,7 +29,7 @@ async function createRoomHandler(
     .then((response) => {
       setLoading(false);
       if (response.data.roomId) {
-        setRoom(`room created : ${response.data}`);
+        setRoom(`room Link : ${HTTP_BACKEND}/canvas/${response.data.roomId}`);
       }
       if (response.data.message === "incorrect inputs") {
         setError("enter minimum 3 letters");
@@ -40,7 +40,6 @@ async function createRoomHandler(
       }
       setTimeout(() => {
         setError("");
-        setRoom("")
       }, 3000);
     })
     .catch((error) => {
@@ -77,7 +76,10 @@ export default function createRoom() {
     <div className="">
       <section className="py-40 min-h-screen place-items-center bg-white">
         <div className="container">
-          <div className="flex flex-col gap-4">
+          <div className={room?"text-center ml-80 text-white text-2xl font-bold bg-black p-20 rounded-md w-fit h-fit":"hidden"}>
+            {room}
+          </div>
+          <div className={!room?"flex flex-col gap-4":"hidden"}>
             <div className="mx-auto w-full max-w-sm rounded-md p-6 shadow ">
               <div className="mb-6 flex flex-col items-center">
                 <a className="mb-6 flex items-center gap-2">
@@ -113,19 +115,9 @@ export default function createRoom() {
                     Create
                     {loading && <Loader />}
                   </Button>
-                  <div>
-                    {error} &&
-                      <div className="text-center text-red-500 bg-red-100 p-2 rounded-md">
+                    {error && <div className="text-center text-red-500 bg-red-100 p-2 rounded-md">
                         {error}
-                      </div>
-                    </div>
-                </div>
-                <div>
-                  {room && (
-                    <div className="text-center text-green- bg-red-100 p-2 rounded-md">
-                      {error}{" "}
-                    </div>
-                  )}
+                      </div>} 
                 </div>
               </div>
             </div>
