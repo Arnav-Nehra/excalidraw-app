@@ -119,16 +119,26 @@ app.get("/room/:slug",async(req,res)=>{
     room
   })
 })
-app.get("/chats/:roomId",async (req,res)=>{
-    const roomId = Number(req.params.roomId)
-    const messages = await prismaClient.chat.findMany({
-      where : {
-        roomId  : roomId
-      },
-      orderBy:{
-        id : "desc"
-      },
-      take : 50
-    })
-})
+
+// Fix in express/index.ts file
+app.get("/chats/:roomId", async (req, res) => {
+  const roomId = Number(req.params.roomId);
+  const messages = await prismaClient.chat.findMany({
+    where: {
+      roomId: roomId
+    },
+    orderBy: {
+      // Get messages in chronological order to properly reconstruct state
+      id: "asc"
+    },
+    take: 200 // Increase limit to ensure we get all messages
+  });
+  
+  console.log(`Returning ${messages.length} messages for room ${roomId}`);
+  
+  // Return the messages to the client
+  res.json({
+    messages
+  });
+});
 app.listen(3002);
